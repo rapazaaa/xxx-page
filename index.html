@@ -3,56 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>custom page</title>
+    <title>Love Message</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9c5d1;
+            flex-direction: column;
             overflow: hidden;
-            background-color: #ffebee;
+            position: relative;
         }
         .container {
-            margin-top: 50px;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        input, button {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: #ff6b81;
+            color: white;
+            cursor: pointer;
         }
         .popup {
+            display: none;
             position: fixed;
-            bottom: -100px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            background: red;
-            color: white;
-            padding: 15px 30px;
-            font-size: 20px;
-            font-weight: bold;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
             border-radius: 10px;
-            opacity: 0;
-            transition: all 0.5s ease-in-out;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 10;
         }
-        .show {
-            bottom: 50px;
-            opacity: 1;
+        .popup button {
+            margin-top: 10px;
+        }
+        .heart {
+            display: inline-block;
+            font-size: 2rem;
+            animation: heartbeat 1s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .heart-fall {
+            position: absolute;
+            font-size: 2rem;
+            color: red;
+            animation: fall 4s linear infinite;
+        }
+        @keyframes fall {
+            from { transform: translateY(-100vh) scale(1); opacity: 1; }
+            to { transform: translateY(100vh) scale(0.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Masukkan Nama Anda</h2>
-        <input type="text" id="nameInput" placeholder="Nama Anda">
-        <button onclick="showPopup()">Submit</button>
+        <h2>Masukkan Nama</h2>
+        <input type="text" id="nameInput" placeholder="Ketik nama...">
+        <button onclick="checkName()">Submit</button>
     </div>
-    <div id="popup" class="popup">I Love You, Rima!</div>
+
+    <div id="popup" class="popup">
+        <h2>I Love You <span class="heart">❤️</span></h2>
+        <button onclick="closePopup()">Tutup</button>
+    </div>
+
     <script>
-        function showPopup() {
-            const name = document.getElementById("nameInput").value.toLowerCase();
-            if (name !== "rima") {
-                alert("Nama tidak dikenali!");
-                return;
+        function checkName() {
+            let name = document.getElementById("nameInput").value.toLowerCase();
+            if (name === "fia") {
+                document.getElementById("popup").style.display = "block";
+                createHearts();
             }
-            const popup = document.getElementById("popup");
-            popup.classList.add("show");
-            setTimeout(() => {
-                popup.classList.remove("show");
-            }, 3000);
+        }
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+        function createHearts() {
+            for (let i = 0; i < 20; i++) {
+                let heart = document.createElement("div");
+                heart.classList.add("heart-fall");
+                heart.innerHTML = "❤️";
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+                document.body.appendChild(heart);
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+            }
         }
     </script>
 </body>
